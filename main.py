@@ -3,6 +3,8 @@ from constants import *
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from shot import Shot
+import sys
 
 def main():
     pygame.init()
@@ -19,10 +21,12 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    shots = pygame.sprite.Group()
 
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
+    Shot.containers = (shots, updatable, drawable)
 
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
@@ -40,25 +44,21 @@ def main():
         dt = delta_time / 1000
 
         for item in updatable:
-            item.update(dt)
+            item.update(dt)            
+
+
+        for asteroid in asteroids:
+            if player.check_collision(asteroid) == True:
+                print("Game over!")
+                sys.exit()
             
         screen.fill("black")
 
         for item in drawable:
-            item.draw(screen)
-
+            item.draw(screen)      
         
-        # player.draw(screen)
-
-        # Use the screen's fill method to fill the screen with a solid "black" color.
         # Use pygame's display.flip() method to refresh the screen.
-        pygame.display.flip()
-
-
-       
-
-        # player.update(dt)
-
+        pygame.display.flip()      
 
 
 if __name__ == "__main__":
